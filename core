@@ -33,10 +33,15 @@ install() {
   chmod +x $bin_file
 
   # install
-  sudo mv $bin_file $usr_bin_dir/docker-${name}
+  sudo mv $bin_file $usr_bin_dir/docker-buildx
 
   # clean
   rm -rf $tmp_dir
+
+  # as docker plugin
+  # https://github.com/docker/buildx
+  mkdir -p mkdir -p ~/.docker/cli-plugins
+  ln -sf $usr_bin_dir/docker-buildx ~/.docker/cli-plugins/docker-buildx
 }
 
 export -f install
