@@ -59,10 +59,10 @@ install() {
     fi
   }
 
-  
   if [ "$(has_builder $builder_name)" != "true" ]; then
     log::info "[$(timestamp)] creating builder instance: $builder_name ..."
-    docker buildx create --use --name=$builder_name >>/dev/null
+    # docker buildx create --use --name=$builder_name >>/dev/null
+    docker buildx create --append --name=$builder_name >>/dev/null
     if [ "$?" != "0" ]; then
       log::error "[$(timestamp)] failed to create builder instance: $builder_name."
       return 1
