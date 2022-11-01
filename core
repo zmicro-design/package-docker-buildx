@@ -1,6 +1,11 @@
 #!/bin/bash
 
 install() {
+  if [ "$(os::is_macos)" = "true" ]; then
+    log::info "[$(timestamp)] Docker Buildx is included in Docker Desktop for macOS."
+    return
+  fi
+
   # get system os/arch
   local arch="$PACKAGE_OS_ARCH"
   local kernel="$PACKAGE_OS_KERNEL"
