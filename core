@@ -50,8 +50,17 @@ install() {
 
   # create builder instance
   local builder_name=buildx
-  docker buildx ls | grep $builder_name >>/dev/null 2>&1
-  if [ "$?" != "0" ]; then
+  has_builder() {
+    docker buildx ls 2>>/dev/null | grep $1 >>/dev/null 2>&1
+    if [ "$?" != "0" ]; then
+      echo "false"
+    else
+      echo "true"
+    fi
+  }
+
+  
+  if [ "$(has_builder $builder_name)" != "true" ]; then
     log::info "[$(timestamp)] creating builder instance: $builder_name ..."
     docker buildx create --use --name=$builder_name >>/dev/null
     if [ "$?" != "0" ]; then
