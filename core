@@ -28,7 +28,7 @@ install() {
 
   # download
   os::download $tmp_file $url
-  
+
   # make executable
   chmod +x $bin_file
 
@@ -41,7 +41,24 @@ install() {
   # as docker plugin
   # https://github.com/docker/buildx
   mkdir -p ~/.docker/cli-plugins
+  log::info "[$(timestamp)] creating docker plugin: docker-buildx ..."
   ln -sf $usr_bin_dir/docker-buildx ~/.docker/cli-plugins/docker-buildx
+  if [ "$?" != "0" ]; then
+    log::error "[$(timestamp)] failed to create docker plugin: docker-buildx."
+    return 1
+  fi
+
+  # create builder instance
+  local builder_name=buildx
+  docker buildx ls | grep $builder_name >>/dev/null 2>&1
+  if [ "$?" != "0" ]; then
+    log::info "[$(timestamp)] creating builder instance: $builder_name ..."
+    docker buildx create --use --name=$builder_name >>/dev/null
+    if [ "$?" != "0" ]; then
+      log::error "[$(timestamp)] failed to create builder instance: $builder_name."
+      return 1
+    fi
+  fi
 }
 
 export -f install
