@@ -40,7 +40,7 @@ install() {
 
   # as docker plugin
   # https://github.com/docker/buildx
-  mkdir -p mkdir -p ~/.docker/cli-plugins
+  mkdir -p ~/.docker/cli-plugins
   ln -sf $usr_bin_dir/docker-buildx ~/.docker/cli-plugins/docker-buildx
 }
 
