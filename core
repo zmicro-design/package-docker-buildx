@@ -53,31 +53,31 @@ install() {
     return 1
   fi
 
-  # if it in docker build env, do not create builder instance
-  if [ "$(os::is_docker_build_env)" = "true" ] || [ "$(os::is_docker)" = "true" ]; then
-    return
-  fi
+  # # if it in docker build env, do not create builder instance
+  # if [ "$(os::is_docker_build_env)" = "true" ] || [ "$(os::is_docker)" = "true" ]; then
+  #   return
+  # fi
 
-  # create builder instance
-  local builder_name=buildx
-  has_builder() {
-    docker buildx ls 2>>/dev/null | grep $1 >>/dev/null 2>&1
-    if [ "$?" != "0" ]; then
-      echo "false"
-    else
-      echo "true"
-    fi
-  }
+  # # create builder instance
+  # local builder_name=buildx
+  # has_builder() {
+  #   docker buildx ls 2>>/dev/null | grep $1 >>/dev/null 2>&1
+  #   if [ "$?" != "0" ]; then
+  #     echo "false"
+  #   else
+  #     echo "true"
+  #   fi
+  # }
 
-  if [ "$(has_builder $builder_name)" != "true" ]; then
-    log::info "[$(timestamp)] creating builder instance: $builder_name ..."
-    # docker buildx create --use --bootstrap --name=$builder_name --platform=linux/amd64,linux/arm64 >>/dev/null
-    docker buildx create --append --name=$builder_name --platform=linux/amd64,linux/arm64 >>/dev/null
-    if [ "$?" != "0" ]; then
-      log::error "[$(timestamp)] failed to create builder instance: $builder_name."
-      return 1
-    fi
-  fi
+  # if [ "$(has_builder $builder_name)" != "true" ]; then
+  #   log::info "[$(timestamp)] creating builder instance: $builder_name ..."
+  #   # docker buildx create --use --bootstrap --name=$builder_name --platform=linux/amd64,linux/arm64 >>/dev/null
+  #   docker buildx create --append --name=$builder_name --platform=linux/amd64,linux/arm64 >>/dev/null
+  #   if [ "$?" != "0" ]; then
+  #     log::error "[$(timestamp)] failed to create builder instance: $builder_name."
+  #     return 1
+  #   fi
+  # fi
 }
 
 export -f install
