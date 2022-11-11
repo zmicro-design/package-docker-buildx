@@ -54,7 +54,7 @@ install() {
   fi
 
   # if it in docker build env, do not create builder instance
-  if [ "$(os::is_docker_build_env)" = "true" ]; then
+  if [ "$(os::is_docker_build_env)" = "true" ] || [ "$(os::is_docker)" = "true" ]; then
     return
   fi
 
