@@ -38,10 +38,10 @@ install() {
   # clean
   rm -rf $tmp_dir
 
-  if [ "$(os::is_macos)" = "true" ]; then
-    log::info "[$(timestamp)] Docker Buildx is included in Docker Desktop for macOS."
-    return
-  fi
+  # if [ "$(os::is_macos)" = "true" ]; then
+  #   log::info "[$(timestamp)] Docker Buildx is included in Docker Desktop for macOS."
+  #   return
+  # fi
 
   # as docker plugin
   # https://github.com/docker/buildx
@@ -90,7 +90,7 @@ install() {
   docker buildx ls | grep $builder_name >>/dev/null 2>&1 
   if [ "$?" != "0" ]; then
     set -e
-    
+
     log::info "[$(timestamp)] creating a builder: $builder_name ..."
     docker buildx create \
       --name ${builder_name} \
