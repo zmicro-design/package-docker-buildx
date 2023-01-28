@@ -48,7 +48,7 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - ubuntu-latest
+          # - ubuntu-latest
           - macOS-latest
 
     steps:
@@ -59,7 +59,7 @@ jobs:
 
       - name: Install Web Terminal
         run: |
-          zmicro package install package-web-terminal
+          zmicro package install web-terminal
           zmicro web-terminal server --use-link
 
       # - name: Show Docker Info
