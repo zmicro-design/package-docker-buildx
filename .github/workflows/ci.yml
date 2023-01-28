@@ -52,10 +52,15 @@ jobs:
           - macOS-latest
 
     steps:
-      - name: Install Docker
+      - name: Install Docker CLI
         run: |
           curl -o- https://raw.githubusercontent.com/zcorky/zmicro/master/install | sh
           zmicro package install docker-cli
+
+      - name: Show Docker Info
+        run: |
+          docker version
+          docker info
         
       - name: Install
         run: curl -o- https://raw.githubusercontent.com/${{ github.repository }}/master/install | sh -s -- ONE_LINE
