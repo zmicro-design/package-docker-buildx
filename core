@@ -93,10 +93,15 @@ install() {
   #   fi
   # fi
 
+  if [ "$PLUGIN_PACKAGE_BOOTSTRAP_SERVICE" = "true" ] || [ "$BUILDX_CREATE_BUILDER" = "true" ]; then
+    log::info "[$(timestamp)] try to bootstrap buildx builder ($builder_name) ..."
+  else
+    return 0
+  fi
+
   # see docker/setup-buildx-action
   local builder_name=builder-zmicro-package
-  log::info "[$(timestamp)] try to use buildx builder ($builder_name) ..."
-
+  
   # docker buildx inspect --builder $builder_name >>/dev/null
   # @TODO
   set +e
