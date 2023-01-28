@@ -44,8 +44,16 @@ install() {
   fi
 
   if [ "$CI" = "true" ]; then
-    log::info "[$(timestamp)] ignore create docker buildx build in CI mode."
-    return 0
+    if [ -z "$GITHUB_CI" ] || [ -z "$GITHUB_ACTIONS" ]; then
+      log::info "[$(timestamp)] install buildx in github action"
+    elif [ -z "$GITLAB_CI" ]; then
+      log::info "[$(timestamp)] install buildx in gitlab ci"
+    elif [ -z "$EUNOMIA_CI" ]; then
+      log::info "[$(timestamp)] install buildx in eunomia ci"
+    else
+      log::info "[$(timestamp)] ignore create docker buildx build in CI mode."
+      return 0
+    fi
   fi
 
   # as docker plugin
