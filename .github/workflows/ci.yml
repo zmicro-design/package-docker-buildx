@@ -59,23 +59,31 @@ jobs:
 
       - name: Show Docker Info
         run: |
-          export DOCKER_HOST="unix://$HOME/.docker/run/docker.sock" 
+          if [ "$(uname -s)" = "Darwin" ]; then
+            export DOCKER_HOST="unix://$HOME/.docker/run/docker.sock" 
+          fi
           docker version
           docker info
         
       - name: Install
         run: |
-          export DOCKER_HOST="unix://$HOME/.docker/run/docker.sock" 
+          if [ "$(uname -s)" = "Darwin" ]; then
+            export DOCKER_HOST="unix://$HOME/.docker/run/docker.sock" 
+          fi
           curl -o- https://raw.githubusercontent.com/${{ github.repository }}/master/install | sh -s -- ONE_LINE
 
       - name: help
         run: |
-          export DOCKER_HOST="unix://$HOME/.docker/run/docker.sock" 
+          if [ "$(uname -s)" = "Darwin" ]; then
+            export DOCKER_HOST="unix://$HOME/.docker/run/docker.sock" 
+          fi
           package=$(echo ${{ github.repository }} | awk -F '/' '{print $2}' | sed 's/package-//')
           zmicro $package help
 
       - name: version
         run: |
-          export DOCKER_HOST="unix://$HOME/.docker/run/docker.sock"
+          if [ "$(uname -s)" = "Darwin" ]; then
+            export DOCKER_HOST="unix://$HOME/.docker/run/docker.sock" 
+          fi
           package=$(echo ${{ github.repository }} | awk -F '/' '{print $2}' | sed 's/package-//')
           zmicro $package version
