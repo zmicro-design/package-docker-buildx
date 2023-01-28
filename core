@@ -47,7 +47,7 @@ install() {
   # https://github.com/docker/buildx
   mkdir -p $HOME/.docker/cli-plugins
   log::info "[$(timestamp)] creating docker plugin: docker-buildx ..."
-  log::info "[$(timestamp)] command: ln -sf $usr_bin_dir/docker-buildx $HOME/.docker/cli-plugins/docker-buildx"
+  # log::info "[$(timestamp)] command: ln -sf $usr_bin_dir/docker-buildx $HOME/.docker/cli-plugins/docker-buildx"
   ln -sf $usr_bin_dir/docker-buildx $HOME/.docker/cli-plugins/docker-buildx
   if [ "$?" != "0" ]; then
     log::error "[$(timestamp)] failed to create docker plugin: docker-buildx."
@@ -82,7 +82,9 @@ install() {
 
   # see docker/setup-buildx-action
   local builder_name=builder-zmicro-package
-  docker buildx inspect --builder $builder_name >>/dev/null 2>&1
+  log::info "[$(timestamp)] try to use buildx builder ($builder_name) ..."
+
+  docker buildx inspect --builder $builder_name >>/dev/null
   if [ "$?" != "0" ]; then
     log::info "[$(timestamp)] creating a builder: $builder_name ..."
     docker buildx create \
