@@ -39,8 +39,13 @@ install() {
   rm -rf $tmp_dir
 
   if [ "$(os::is_macos)" = "true" ]; then
-    log::info "[$(timestamp)] Docker Buildx is included in Docker Desktop for macOS."
-    return
+    log::info "[$(timestamp)] ignore create docker buildx build, because Docker Buildx is included in Docker Desktop for macOS."
+    return 0
+  fi
+
+  if [ "$CI" = "true" ]; then
+    log::info "[$(timestamp)] ignore create docker buildx build in CI mode."
+    return 0
   fi
 
   # as docker plugin
@@ -87,7 +92,7 @@ install() {
   # docker buildx inspect --builder $builder_name >>/dev/null
   # @TODO
   set +e
-  docker buildx ls | grep $builder_name >>/dev/null 2>&1 
+  docker buildx ls | grep $builder_name >>/dev/null 2>&1
   if [ "$?" != "0" ]; then
     set -e
 
