@@ -85,7 +85,7 @@ install() {
   log::info "[$(timestamp)] try to use buildx builder ($builder_name) ..."
 
   # docker buildx inspect --builder $builder_name >>/dev/null
-  docker buildx ls | grep " $builder_name" >>/dev/null 2>&1 
+  docker buildx ls | grep "$builder_name" >>/dev/null 2>&1 
   if [ "$?" != "0" ]; then
     log::info "[$(timestamp)] creating a builder: $builder_name ..."
     docker buildx create \
