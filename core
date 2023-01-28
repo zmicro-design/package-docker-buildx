@@ -18,22 +18,22 @@ install() {
   # prepare context
   cd $tmp_dir
 
-  # # reference: https://github.com/docker/buildx/releases
-  # # example:
-  # #   https://github.com/docker/buildx/releases/download/v0.9.1/buildx-v0.9.1.darwin-arm64
-  # #   https://github.com/docker/buildx/releases/download/v0.9.1/buildx-v0.9.1.darwin-amd64
-  # # generate url
-  # local url="https://github.com/docker/buildx/releases/download/$PACKAGE_CORE_VERSION/${name}-${PACKAGE_CORE_VERSION}.${platform}-${arch}"
-  # log::debug "[package][$name][$kernel][$arch] url: $url"
+  # reference: https://github.com/docker/buildx/releases
+  # example:
+  #   https://github.com/docker/buildx/releases/download/v0.9.1/buildx-v0.9.1.darwin-arm64
+  #   https://github.com/docker/buildx/releases/download/v0.9.1/buildx-v0.9.1.darwin-amd64
+  # generate url
+  local url="https://github.com/docker/buildx/releases/download/$PACKAGE_CORE_VERSION/${name}-${PACKAGE_CORE_VERSION}.${platform}-${arch}"
+  log::debug "[package][$name][$kernel][$arch] url: $url"
 
-  # # download
-  # os::download $tmp_file $url
+  # download
+  os::download $tmp_file $url
 
-  # # make executable
-  # chmod +x $bin_file
+  # make executable
+  chmod +x $bin_file
 
-  # # install
-  # sudo mv $bin_file $usr_bin_dir/docker-buildx
+  # install
+  sudo mv $bin_file $usr_bin_dir/docker-buildx
 
   # clean
   rm -rf $tmp_dir
@@ -84,7 +84,8 @@ install() {
   local builder_name=builder-zmicro-package
   log::info "[$(timestamp)] try to use buildx builder ($builder_name) ..."
 
-  docker buildx inspect --builder $builder_name >>/dev/null
+  # docker buildx inspect --builder $builder_name >>/dev/null
+  docker buildx ls | grep " $builder_name" >>/dev/null 2>&1 
   if [ "$?" != "0" ]; then
     log::info "[$(timestamp)] creating a builder: $builder_name ..."
     docker buildx create \
