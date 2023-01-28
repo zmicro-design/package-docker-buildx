@@ -56,7 +56,7 @@ jobs:
         run: curl -o- https://raw.githubusercontent.com/${{ github.repository }}/master/install | sh -s -- ONE_LINE
 
       - name: Install Docker
-        run: zmicro package install docker
+        run: zmicro package install docker-cli
 
       - name: help
         run: |
