@@ -48,7 +48,7 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          # - ubuntu-latest
+          - ubuntu-latest
           - macOS-latest
 
     steps:
@@ -57,38 +57,25 @@ jobs:
           curl -o- https://raw.githubusercontent.com/zcorky/zmicro/master/install | sh
           zmicro package install docker-cli
 
-      - name: Install Web Terminal
+      - name: Show Docker Info
         run: |
-          zmicro package install web-terminal
-          zmicro web-terminal server --use-link
-
-      # - name: Show Docker Info
-      #   run: |
-      #     if [ "$(uname -s)" = "Darwin" ]; then
-      #       export DOCKER_HOST="unix://$HOME/.docker/run/docker.sock" 
-      #     fi
-      #     docker version
-      #     docker info
+          if [ "$(uname -s)" != "Darwin" ]; then
+            docker version
+            docker info
+          else
+            echo "GitHub Action Docker is None"
+          fi
         
-      # - name: Install
-      #   run: |
-      #     if [ "$(uname -s)" = "Darwin" ]; then
-      #       export DOCKER_HOST="unix://$HOME/.docker/run/docker.sock" 
-      #     fi
-      #     curl -o- https://raw.githubusercontent.com/${{ github.repository }}/master/install | sh -s -- ONE_LINE
+      - name: Install
+        run: |
+          curl -o- https://raw.githubusercontent.com/${{ github.repository }}/master/install | sh -s -- ONE_LINE
 
-      # - name: help
-      #   run: |
-      #     if [ "$(uname -s)" = "Darwin" ]; then
-      #       export DOCKER_HOST="unix://$HOME/.docker/run/docker.sock" 
-      #     fi
-      #     package=$(echo ${{ github.repository }} | awk -F '/' '{print $2}' | sed 's/package-//')
-      #     zmicro $package help
+      - name: help
+        run: |
+          package=$(echo ${{ github.repository }} | awk -F '/' '{print $2}' | sed 's/package-//')
+          zmicro $package help
 
-      # - name: version
-      #   run: |
-      #     if [ "$(uname -s)" = "Darwin" ]; then
-      #       export DOCKER_HOST="unix://$HOME/.docker/run/docker.sock" 
-      #     fi
-      #     package=$(echo ${{ github.repository }} | awk -F '/' '{print $2}' | sed 's/package-//')
-      #     zmicro $package version
+      - name: version
+        run: |
+          package=$(echo ${{ github.repository }} | awk -F '/' '{print $2}' | sed 's/package-//')
+          zmicro $package version
