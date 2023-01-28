@@ -78,6 +78,32 @@ install() {
   #     return 1
   #   fi
   # fi
+
+  # see docker/setup-buildx-action
+  local builder_name=builder-zmicro-package
+  docker buildx inspect --builder $builder_name >>/dev/null 2>&1
+  if [ "$?" != "0" ]; then
+    log::info "[$(timestamp)] creating a builder: $builder_name ..."
+    docker buildx create \
+      --name ${builder_name} \
+      --driver docker-container \
+      --buildkitd-flags \
+      --allow-insecure-entitlement security.insecure \
+      --allow-insecure-entitlement network.host \
+      --use
+  fi
+
+  local status=$(docker buildx inspect --bootstrap default | grep Status | awk '{print $2}')
+  if [ "$status" != "running" ]; then
+    log::info "[$(timestamp)] bootstraping builder: $builder_name ..."
+    docker buildx inspect --bootstrap --builder $builder_name
+  fi
+
+  log::info "[$(timestamp)] inspecting builder: $builder_name ..."
+  docker buildx inspect --builder $builder_name
+
+  log::info "[$(timestamp)] show buildx version ..."
+  docker buildx version
 }
 
 export -f install
