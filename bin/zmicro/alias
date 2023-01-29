@@ -1,5 +1,10 @@
 #!/bin/bash
 
+export PACKAGE_NAME="docker-buildx"
+import "$ZMICRO_PACKAGES_PATH/$PACKAGE_NAME/config"
+import "$ZMICRO_PACKAGES_PATH/$PACKAGE_NAME/core"
+
+
 help() {
   echo "Usage:"
   echo "  zmicro docker-buildx <args ...>"
@@ -12,6 +17,19 @@ version() {
   docker-buildx version
 }
 
+bootstrap() {
+  local builder_name=$PACKAGE_CORE_BUILDER_NAME
+
+  log::info "[$(timestamp)] try to bootstrap buildx builder ($builder_name) ..."
+  bootstrap_service $builder_name
+  if [ "$?" != "0" ]; then
+    log::error "[$(timestamp)] failed to bootstrap buildx builder ($builder_name) ."
+    return 1
+  fi
+
+  log::success "[$(timestamp)] succeed to bootstrap buildx builder ($builder_name) ."
+}
+
 core() {
   case $1 in
   -h | --help | help)
@@ -19,6 +37,9 @@ core() {
     ;;
   -v | --version | version)
     version
+    ;;
+  bootstrap)
+    bootstrap "$@"
     ;;
   *)
     docker-buildx "$@"
