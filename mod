@@ -1,4 +1,4 @@
 NAME=docker-buildx
-VERSION=v1.3.5
+VERSION=v1.4.1
 MODULE=package
 DESCRIPTION="Highly opinionated MTPROTO proxy for Telegram"
