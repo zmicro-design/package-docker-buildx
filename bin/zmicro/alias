@@ -4,10 +4,14 @@ export PACKAGE_NAME="docker-buildx"
 import "$ZMICRO_PACKAGES_PATH/$PACKAGE_NAME/config"
 import "$ZMICRO_PACKAGES_PATH/$PACKAGE_NAME/core"
 
-
 help() {
   echo "Usage:"
-  echo "  zmicro docker-buildx <args ...>"
+  echo "  zmicro docker-buildx <command> <args ...>"
+  echo ""
+  echo "Command:"
+  echo "  create <builder_name>  create a builder instance"
+  echo "  bootstrap <builder_name>  bootstrap a builder instance"
+  echo "  use <builder_name>  use a builder instance"
   echo ""
 
   docker-buildx --help
@@ -17,8 +21,39 @@ version() {
   docker-buildx version
 }
 
+create() {
+  local builder_name=${1:-$PACKAGE_CORE_BUILDER_NAME}
+  if [ -z "$builder_name" ]; then
+    log::error "[$(timestamp)] builder name is required."
+    return 1
+  fi
+
+  # log limit: 10 MB
+  # issues:
+  #   1. [output clipped, log limit 1MiB reached] and then exit code 7 - https://github.com/docker/buildx/issues/484
+  #   2. Docker编译镜像时报错 output clipped, log limit 1MiB reached - https://www.mayanpeng.cn/archives/155.html
+  #
+  log::info "[$(timestamp)] creating builder: $builder_name ..."
+  docker buildx create \
+    --name ${builder_name} \
+    --driver docker-container \
+    --driver-opt env.BUILDKIT_STEP_LOG_MAX_SIZE=10485760 \
+    --buildkitd-flags "--allow-insecure-entitlement security.insecure --allow-insecure-entitlement network.host" \
+    --use >>/dev/null
+  if [ "$?" != "0" ]; then
+    log::error "[$(timestamp)] failed to create builder: $builder_name ."
+    return 1
+  fi
+
+  log::info "[$(timestamp)] succeed to create builder: $builder_name ."
+}
+
 bootstrap() {
-  local builder_name=$PACKAGE_CORE_BUILDER_NAME
+  local builder_name=${1:-$PACKAGE_CORE_BUILDER_NAME}
+  if [ -z "$builder_name" ]; then
+    log::error "[$(timestamp)] builder name is required."
+    return 1
+  fi
 
   log::info "[$(timestamp)] try to bootstrap buildx builder ($builder_name) ..."
   bootstrap_service $builder_name
@@ -30,6 +65,16 @@ bootstrap() {
   log::success "[$(timestamp)] succeed to bootstrap buildx builder ($builder_name) ."
 }
 
+use() {
+  local builder_name=${1:-$PACKAGE_CORE_BUILDER_NAME}
+  if [ -z "$builder_name" ]; then
+    log::error "[$(timestamp)] builder name is required."
+    return 1
+  fi
+
+  docker buildx use $builder_name
+}
+
 core() {
   case $1 in
   -h | --help | help)
@@ -37,6 +82,12 @@ core() {
     ;;
   -v | --version | version)
     version
+    ;;
+  create)
+    create "$@"
+    ;;
+  use)
+    use "$@"
     ;;
   bootstrap)
     bootstrap "$@"
