@@ -1,4 +1,4 @@
 #!/bin/bash
 
-export PACKAGE_CORE_VERSION=v0.10.1
+export PACKAGE_CORE_VERSION=v0.11.2
 export PACKAGE_CORE_BUILDER_NAME="builder-zmicro-package"
