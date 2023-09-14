@@ -22,8 +22,10 @@ install() {
   # example:
   #   https://github.com/docker/buildx/releases/download/v0.9.1/buildx-v0.9.1.darwin-arm64
   #   https://github.com/docker/buildx/releases/download/v0.9.1/buildx-v0.9.1.darwin-amd64
+  #   https://github.com/docker/buildx/releases/download/v0.9.1/buildx-v0.9.1.linux-arm64
+  #   https://github.com/docker/buildx/releases/download/v0.9.1/buildx-v0.9.1.linux-amd64 
   # generate url
-  local url="https://github.com/docker/buildx/releases/download/$PACKAGE_CORE_VERSION/${name}-${PACKAGE_CORE_VERSION}.${platform}-${arch}"
+  local url="${PACKAGE_CORE_RELEASE_DOWNLOAD}/$PACKAGE_CORE_VERSION/${name}-${PACKAGE_CORE_VERSION}.${platform}-${arch}"
   log::debug "[package][$name][$kernel][$arch] url: $url"
 
   # download
@@ -33,7 +35,7 @@ install() {
   chmod +x $bin_file
 
   # install
-  sudo mv $bin_file $usr_bin_dir/docker-buildx
+  sudo mv $bin_file $usr_bin_dir/${PACKAGE_CORE_NAME}
 
   # clean
   rm -rf $tmp_dir
@@ -59,11 +61,11 @@ install() {
   # as docker plugin
   # https://github.com/docker/buildx
   mkdir -p $HOME/.docker/cli-plugins
-  log::info "[$(timestamp)] creating docker plugin: docker-buildx ..."
-  # log::info "[$(timestamp)] command: ln -sf $usr_bin_dir/docker-buildx $HOME/.docker/cli-plugins/docker-buildx"
-  ln -sf $usr_bin_dir/docker-buildx $HOME/.docker/cli-plugins/docker-buildx
+  log::info "[$(timestamp)] creating docker plugin: ${PACKAGE_CORE_NAME} ..."
+  # log::info "[$(timestamp)] command: ln -sf $usr_bin_dir/${PACKAGE_CORE_NAME} $HOME/.docker/cli-plugins/${PACKAGE_CORE_NAME}"
+  ln -sf $usr_bin_dir/${PACKAGE_CORE_NAME} $HOME/.docker/cli-plugins/${PACKAGE_CORE_NAME}
   if [ "$?" != "0" ]; then
-    log::error "[$(timestamp)] failed to create docker plugin: docker-buildx."
+    log::error "[$(timestamp)] failed to create docker plugin: ${PACKAGE_CORE_NAME}."
     return 1
   fi
 
