@@ -19,7 +19,7 @@ install() {
   cd $tmp_dir
 
   if [ "$(os::has_command docker)" != "true" ]; then
-    zmicro package install docker
+    zmicro package install docker-cli
   fi
 
   # reference: https://github.com/docker/buildx/releases
