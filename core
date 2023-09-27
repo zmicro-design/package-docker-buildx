@@ -139,7 +139,7 @@ bootstrap_service() {
       --driver docker-container \
       --driver-opt env.BUILDKIT_STEP_LOG_MAX_SIZE=10485760 \
       --driver-opt image=${PACKAGE_CORE_BUILDER_IMAGE} \
-      --platform 
+      --platform ${PACKAGE_CORE_BUILDER_PLATFORM} \
       --buildkitd-flags "--allow-insecure-entitlement security.insecure --allow-insecure-entitlement network.host" \
       --use >>/dev/null
     if [ "$?" != "0" ]; then
