@@ -44,18 +44,18 @@ install() {
   # clean
   rm -rf $tmp_dir
 
-  if [ "$(os::is_macos)" = "true" ]; then
-    log::info "[$(timestamp)] ignore create docker buildx build, because Docker Buildx is included in Docker Desktop for macOS."
-    return 0
-  fi
+  # if [ "$(os::is_macos)" = "true" ]; then
+  #   log::info "[$(timestamp)] ignore create docker buildx build, because Docker Buildx is included in Docker Desktop for macOS."
+  #   return 0
+  # fi
 
   if [ "$CI" = "true" ]; then
     if [ -z "$GITHUB_CI" ] || [ -z "$GITHUB_ACTIONS" ]; then
-      log::info "[$(timestamp)] install buildx in github action"
+      log::info "[$(timestamp)] install buildx in github action (platform: $platform, arch: $arch)"
     elif [ -z "$GITLAB_CI" ]; then
-      log::info "[$(timestamp)] install buildx in gitlab ci"
+      log::info "[$(timestamp)] install buildx in gitlab ci (platform: $platform, arch: $arch)"
     elif [ -z "$EUNOMIA_CI" ]; then
-      log::info "[$(timestamp)] install buildx in eunomia ci"
+      log::info "[$(timestamp)] install buildx in eunomia ci (platform: $platform, arch: $arch)"
     else
       log::info "[$(timestamp)] ignore create docker buildx build in CI mode."
       return 0
