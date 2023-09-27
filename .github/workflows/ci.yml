@@ -81,16 +81,3 @@ jobs:
         run: |
           package=$(echo ${{ github.repository }} | awk -F '/' '{print $2}' | sed 's/package-//')
           zmicro $package version
-
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: "0"
-
-      - name: test
-        # uses: docker/build-push-action@v2
-        uses: zmicro-design/action-docker-build@v1
-        with:
-          context: .
-          push: false
-          tags: test
-          platforms: linux/amd64,linux/arm64
