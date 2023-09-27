@@ -18,6 +18,10 @@ install() {
   # prepare context
   cd $tmp_dir
 
+  if [ "$(os::has_command docker)" != "true" ]; then
+    zmicro package install docker
+  fi
+
   # reference: https://github.com/docker/buildx/releases
   # example:
   #   https://github.com/docker/buildx/releases/download/v0.9.1/buildx-v0.9.1.darwin-arm64
