@@ -30,6 +30,10 @@ install() {
   #   https://github.com/docker/buildx/releases/download/v0.9.1/buildx-v0.9.1.linux-amd64 
   # generate url
   local url="${PACKAGE_CORE_RELEASE_DOWNLOAD}/$PACKAGE_CORE_VERSION/${name}-${PACKAGE_CORE_VERSION}.${platform}-${arch}"
+  if [ -n "$PACKAGE_CORE_DOWNLOAD_URL" ]; then
+    url="$PACKAGE_CORE_DOWNLOAD_URL"
+  fi
+
   log::debug "[package][$name][$kernel][$arch] url: $url"
 
   # download
