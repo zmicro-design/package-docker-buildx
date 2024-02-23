@@ -139,7 +139,7 @@ bootstrap_service() {
     set -e
 
     if [ ! -f "$PACKAGE_CORE_BUILDKITD_CONFIG_FILE" ]; then
-      sudo mkdir -p $(dirname $PACKAGE_CORE_BUILDKITD_CONFIG_DIR)
+      sudo mkdir -p $(dirname $PACKAGE_CORE_BUILDKITD_CONFIG_FILE)
       sudo cp $PACKAGE_DIR/conf/buildx/buildkitd.default.toml $PACKAGE_CORE_BUILDKITD_CONFIG_FILE
     fi
 
