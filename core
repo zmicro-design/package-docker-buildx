@@ -138,6 +138,11 @@ bootstrap_service() {
   if [ "$?" != "0" ]; then
     set -e
 
+    if [ ! -f "$PACKAGE_CORE_BUILDKITD_CONFIG_FILE" ]; then
+      sudo mkdir -p $(dirname $PACKAGE_CORE_BUILDKITD_CONFIG_DIR)
+      sudo cp $PACKAGE_DIR/conf/buildx/buildkitd.default.toml $PACKAGE_CORE_BUILDKITD_CONFIG_FILE
+    fi
+
     # log limit: 10 MB
     # issues:
     #   1. [output clipped, log limit 1MiB reached] and then exit code 7 - https://github.com/docker/buildx/issues/484

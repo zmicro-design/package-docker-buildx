@@ -1,6 +1,7 @@
 #!/bin/bash
 
 export PACKAGE_NAME="docker-buildx"
+export PACKAGE_DIR="$ZMICRO_PACKAGES_PATH/$PACKAGE_NAME"
 import "$ZMICRO_PACKAGES_PATH/$PACKAGE_NAME/config"
 import "$ZMICRO_PACKAGES_PATH/$PACKAGE_NAME/core"
 
@@ -26,6 +27,11 @@ create() {
   if [ -z "$builder_name" ]; then
     log::error "[$(timestamp)] builder name is required."
     return 1
+  fi
+
+  if [ ! -f "$PACKAGE_CORE_BUILDKITD_CONFIG_FILE" ]; then
+    sudo mkdir -p $(dirname $PACKAGE_CORE_BUILDKITD_CONFIG_DIR)
+    sudo cp $PACKAGE_DIR/conf/buildx/buildkitd.default.toml $PACKAGE_CORE_BUILDKITD_CONFIG_FILE
   fi
 
   # log limit: 10 MB
